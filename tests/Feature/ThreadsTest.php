@@ -11,16 +11,12 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ThreadsTest extends TestCase
 {
     use DatabaseMigrations;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
-    {
-        $response = $this->get('/');
 
-        $response->assertStatus(200);
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->threads = factory('App\Thread', 50)->create();
     }
 
     /**
@@ -28,11 +24,9 @@ class ThreadsTest extends TestCase
      */
     public function a_user_can_view_all_threads()
     {
-        $threads = factory('App\Thread', 50)->create();
         $response = $this->get('/threads');
-
         $response->assertSee('All threads');
-        foreach ($threads as $thread) {
+        foreach ($this->threads as $thread) {
             $response->assertSee($thread->title);
         }
     }
@@ -42,7 +36,7 @@ class ThreadsTest extends TestCase
      */
     public function a_user_can_view_single_thread()
     {
-        $thread = factory('App\Thread')->create();
+        $thread = $this->threads->first();
         $response = $this->get('/threads/' . $thread->id);
 
         $response->assertSee($thread->title);
