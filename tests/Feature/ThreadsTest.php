@@ -12,16 +12,18 @@ class ThreadsTest extends TestCase
 {
     use DatabaseMigrations;
 
+    protected $threads;
+    protected $thread;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->threads = factory('App\Thread', 50)->create();
+        $this->thread = factory('App\Thread')->create();
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function a_user_can_view_all_threads()
     {
         $response = $this->get('/threads');
@@ -31,15 +33,20 @@ class ThreadsTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function a_user_can_view_single_thread()
     {
-        $thread = $this->threads->first();
-        $response = $this->get('/threads/' . $thread->id);
+        $response = $this->get($this->thread->path());
+        $response->assertSee($this->thread->title);
+        $response->assertSee($this->thread->body);
+    }
 
-        $response->assertSee($thread->title);
-        $response->assertSee($thread->body);
+    /** @test */
+    public function a_thread_can_have_reply()
+    {
+        $this->be($user = factory('App\User')->create());
+        $reply = factory('App\Reply')->create();
+        $this->post($this->thread->path(), $reply->toArray());
+        $this->assertCount(1, $this->thread->replies);
     }
 }
