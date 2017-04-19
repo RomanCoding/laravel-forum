@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ThreadTest extends TestCase
 {
@@ -16,7 +15,7 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
 
     /** @test */
@@ -28,8 +27,7 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_has_replies()
     {
-        $thread = factory('App\Thread')->create();
-
+        $thread = create('App\Thread');
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
     }
 }

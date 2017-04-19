@@ -5,15 +5,22 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">All threads</div>
+                    <div class="panel-heading">Forum Threads</div>
 
-                    @foreach($threads as $thread)
-                        <article>
-                            <h4><a href="{{ $thread->path() }}">{{ $thread->title }}</a></h4>
-                            <p>{{ $thread->body }}</p>
-                        </article>
-                    @endforeach
+                    <div class="panel-body">
+                        @foreach ($threads as $thread)
+                            <article>
+                                <h4>
+                                    <a href="{{ $thread->path() }}">
+                                        {{ $thread->title }}
+                                    </a>
+                                </h4>
+                                <div class="body">{{ $thread->body }}</div>
+                            </article>
 
+                            <hr>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>

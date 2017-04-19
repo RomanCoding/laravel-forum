@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Thread;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ThreadsTest extends TestCase
 {
@@ -20,7 +17,7 @@ class ThreadsTest extends TestCase
         parent::setUp();
 
         $this->threads = factory('App\Thread', 50)->create();
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
 
     /** @test */
@@ -37,8 +34,8 @@ class ThreadsTest extends TestCase
     public function a_user_can_view_single_thread()
     {
         $response = $this->get($this->thread->path());
-        $response->assertSee($this->thread->title);
-        $response->assertSee($this->thread->body);
+        $response->assertSee($this->thread->title)
+                 ->assertSee($this->thread->body);
     }
 
     /** @test */
@@ -48,5 +45,24 @@ class ThreadsTest extends TestCase
         $reply = factory('App\Reply')->create();
         $this->post($this->thread->path(), $reply->toArray());
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_create_thread()
+    {
+        $this->signIn();
+        $thread = make('App\Thread');
+        $this->post('/threads', $thread->toArray());
+        $this->get($thread->path())
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
+    }
+
+    /** @test */
+    public function guest_can_not_create_threads()
+    {
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $thread = make('App\Thread');
+        $this->post('/threads', $thread->toArray());
     }
 }
