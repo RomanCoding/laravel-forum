@@ -65,4 +65,17 @@ class ThreadsTest extends TestCase
         $thread = make('App\Thread');
         $this->post('/threads', $thread->toArray());
     }
+
+    /** @test */
+    public function an_authenticated_user_can_see_form_of_new_thread()
+    {
+        $this->signIn();
+        $this->get('/threads/create')->assertSee('Create new thread');
+    }
+
+    /** @test */
+    public function guest_can_not_see_form_of_new_thread()
+    {
+        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
+    }
 }
