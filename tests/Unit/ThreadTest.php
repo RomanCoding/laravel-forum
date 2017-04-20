@@ -14,7 +14,6 @@ class ThreadTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->thread = create('App\Thread');
     }
 
@@ -27,7 +26,12 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_has_replies()
     {
-        $thread = create('App\Thread');
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
+    }
+
+    /** @test */
+    public function a_thread_belongs_to_a_channel()
+    {
+        $this->assertInstanceOf('App\Channel', $this->thread->channel);
     }
 }

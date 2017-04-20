@@ -41,8 +41,8 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_thread_can_have_reply()
     {
-        $this->be($user = factory('App\User')->create());
-        $reply = factory('App\Reply')->create();
+        $this->signIn();
+        $reply = create('App\Reply');
         $this->post($this->thread->path(), $reply->toArray());
         $this->assertCount(1, $this->thread->replies);
     }
@@ -51,19 +51,19 @@ class ThreadsTest extends TestCase
     public function an_authenticated_user_can_create_thread()
     {
         $this->signIn();
-        $thread = make('App\Thread');
-        $this->post('/threads', $thread->toArray());
-        $this->get($thread->path())
-            ->assertSee($thread->title)
-            ->assertSee($thread->body);
+        $this->post("/threads", $this->thread->toArray());
+        $this->get($this->thread->path())
+             ->assertSee($this->thread->title)
+             ->assertSee($this->thread->body);
     }
 
     /** @test */
     public function guest_can_not_create_threads()
     {
+        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
+        $this->disableExceptionHandling();
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        $thread = make('App\Thread');
-        $this->post('/threads', $thread->toArray());
+        $this->post('/threads/channel', $this->thread->toArray());
     }
 
     /** @test */
@@ -71,11 +71,5 @@ class ThreadsTest extends TestCase
     {
         $this->signIn();
         $this->get('/threads/create')->assertSee('Create new thread');
-    }
-
-    /** @test */
-    public function guest_can_not_see_form_of_new_thread()
-    {
-        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
     }
 }
