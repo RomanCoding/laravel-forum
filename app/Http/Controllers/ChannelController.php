@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Thread;
 use Illuminate\Http\Request;
 
 class ChannelController extends Controller
@@ -46,7 +47,9 @@ class ChannelController extends Controller
      */
     public function show(Channel $channel)
     {
-        //
+        return view('threads.index')->with([
+            'threads' => $channel->threads
+        ]);
     }
 
     /**

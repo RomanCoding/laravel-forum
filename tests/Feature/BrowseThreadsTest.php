@@ -36,4 +36,15 @@ class BrowseThreadsTest extends TestCase
         $response->assertSee($this->thread->title)
                  ->assertSee($this->thread->body);
     }
+
+    /** @test */
+    public function a_user_can_view_threads_from_channel()
+    {
+        $channel = create('App\Channel');
+        $thread = create('App\Thread', ['channel_id' => $channel->id]);
+        $anotherThread = create('App\Thread');
+        $this->get($channel->path())
+             ->assertSee($thread->title, $thread->body)
+             ->assertDontSee($anotherThread->title, $anotherThread->body);
+    }
 }

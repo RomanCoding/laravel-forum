@@ -62,7 +62,8 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Thread  $thread
+     * @param $channel
+     * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function show($channel, Thread $thread)
