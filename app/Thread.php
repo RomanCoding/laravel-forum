@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Filters\ThreadsFilter;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -56,5 +57,10 @@ class Thread extends Model
     public function addReply($reply)
     {
         $this->replies()->create($reply);
+    }
+
+    public function scopeFilter($query, ThreadsFilter $filter)
+    {
+        return $filter->apply($query);
     }
 }

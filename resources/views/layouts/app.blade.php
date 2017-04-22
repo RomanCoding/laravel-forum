@@ -39,8 +39,18 @@
                         {{ config('app.name', 'Laravel') }}
                     </a>
                     <ul class="nav navbar-nav navbar-left">
-                        <li><a href="/threads">All threads</a></li>
-                        <li><a href="/threads/create">Create new thread</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">All threads</a></li>
+                                @if ($auth)
+                                    <li><a href="/threads?by={{ $auth->name }}">Your threads</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                        @if ($auth)
+                            <li><a href="/threads/create">Create new thread</a></li>
+                        @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Channels <span class="caret"></span></a>
                             <ul class="dropdown-menu">

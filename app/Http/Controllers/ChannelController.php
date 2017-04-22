@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Http\Filters\ThreadsFilter;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -42,13 +43,15 @@ class ChannelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Channel  $channel
+     * @param  \App\Channel $channel
+     * @param ThreadsFilter $filter
      * @return \Illuminate\Http\Response
      */
-    public function show(Channel $channel)
+    public function show(Channel $channel, ThreadsFilter $filter)
     {
+        $threads = $channel->threads()->filter($filter)->get();
         return view('threads.index')->with([
-            'threads' => $channel->threads
+            'threads' => $threads
         ]);
     }
 

@@ -47,4 +47,16 @@ class BrowseThreadsTest extends TestCase
              ->assertSee($thread->title, $thread->body)
              ->assertDontSee($anotherThread->title, $anotherThread->body);
     }
+
+    /** @test */
+    public function a_user_can_view_threads_created_by_any_user()
+    {
+        $this->signIn(create('App\User', ['name' => 'NameForTest']));
+        $threadByUser = create('App\Thread', ['user_id' => auth()->id()]);
+        $threadByAnotherUser = create('App\Thread');
+
+        $this->get("/threads?by=NameForTest")
+             ->assertSee($threadByUser->title)
+             ->assertDontSee($threadByAnotherUser->title);
+    }
 }

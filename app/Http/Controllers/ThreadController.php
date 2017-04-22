@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\ThreadsFilter;
 use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 
 class ThreadController extends Controller
@@ -19,11 +21,12 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param ThreadsFilter $filter
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ThreadsFilter $filter)
     {
-        $threads = Thread::latest()->get();
+        $threads = Thread::latest()->filter($filter)->get();
         return view('threads.index', compact('threads'));
     }
 
