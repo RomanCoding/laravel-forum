@@ -49,10 +49,8 @@ class ChannelController extends Controller
      */
     public function show(Channel $channel, ThreadsFilter $filter)
     {
-        $threads = $channel->threads()->filter($filter)->get();
-        return view('threads.index')->with([
-            'threads' => $threads
-        ]);
+        $threads = $channel->threads()->filterAndPaginate($filter, 5);
+        return view('threads.index', compact('threads'));
     }
 
     /**

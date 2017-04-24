@@ -9,6 +9,15 @@ class Thread extends Model
 {
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::addGlobalScope('replyCount', function ($builder) {
+            $builder->withCount('replies');
+        });
+    }
+
     /**
      * Fetch link to current thread.
      *
@@ -20,7 +29,7 @@ class Thread extends Model
     }
 
     /**
-     * Thread can has many replies.
+     * Thread can have many replies.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -59,8 +68,27 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
+    /**
+     * Filter query.
+     *
+     * @param $query
+     * @param ThreadsFilter $filter
+     */
     public function scopeFilter($query, ThreadsFilter $filter)
     {
         return $filter->apply($query);
+    }
+
+    /**
+     * Filter query, paginate and build proper GET params.
+     *
+     * @param $query
+     * @param ThreadsFilter $filter
+     * @param int $perPage
+     * @return mixed
+     */
+    public function scopeFilterAndPaginate($query, ThreadsFilter $filter, $perPage)
+    {
+        return $filter->apply($query)->paginate($perPage)->appends($filter->getFilters());
     }
 }

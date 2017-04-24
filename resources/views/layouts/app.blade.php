@@ -42,7 +42,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">All threads</a></li>
+                                <li><a href="/threads">All threads</a></li>
                                 @if ($auth)
                                     <li><a href="/threads?by={{ $auth->name }}">Your threads</a></li>
                                 @endif

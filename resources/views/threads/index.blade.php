@@ -20,6 +20,9 @@
 
                             <hr>
                         @endforeach
+
+                        {{ $threads->links() }}
+
                     </div>
                 </div>
             </div>

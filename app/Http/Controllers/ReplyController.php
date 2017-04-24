@@ -12,6 +12,14 @@ class ReplyController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @param $channel
+     * @param Thread $thread
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store(Request $request, $channel, Thread $thread)
     {
         $this->validate($request, [

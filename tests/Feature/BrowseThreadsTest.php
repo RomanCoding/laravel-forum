@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -16,7 +17,7 @@ class BrowseThreadsTest extends TestCase
     {
         parent::setUp();
 
-        $this->threads = factory('App\Thread', 50)->create();
+        $this->threads = factory('App\Thread', 5)->create();
         $this->thread = create('App\Thread');
     }
 
@@ -44,8 +45,8 @@ class BrowseThreadsTest extends TestCase
         $thread = create('App\Thread', ['channel_id' => $channel->id]);
         $anotherThread = create('App\Thread');
         $this->get($channel->path())
-             ->assertSee($thread->title, $thread->body)
-             ->assertDontSee($anotherThread->title, $anotherThread->body);
+             ->assertSee($thread->title)
+             ->assertDontSee($anotherThread->title);
     }
 
     /** @test */

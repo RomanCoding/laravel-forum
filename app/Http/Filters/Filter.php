@@ -21,6 +21,8 @@ abstract class Filter
 
     /**
      * Apply filters to a query.
+     *
+     * @param $query
      */
     public function apply($query)
     {
@@ -32,7 +34,12 @@ abstract class Filter
         return $this->query;
     }
 
-    protected function getFilters()
+    /**
+     * Return allowed filters from the request.
+     *
+     * @return array
+     */
+    public function getFilters()
     {
         return $this->request->intersect($this->filters);
     }
