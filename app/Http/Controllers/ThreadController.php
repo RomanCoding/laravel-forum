@@ -26,6 +26,9 @@ class ThreadController extends Controller
      */
     public function index(ThreadsFilter $filter)
     {
+        if (request()->wantsJson()) {
+            return Thread::latest()->filter($filter)->get();
+        }
         $threads = Thread::latest()->filterAndPaginate($filter, 5);
         return view('threads.index', compact('threads'));
     }

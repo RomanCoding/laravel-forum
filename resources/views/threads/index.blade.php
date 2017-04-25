@@ -16,6 +16,12 @@
                                     </a>
                                 </h4>
                                 <div class="body">{{ $thread->body }}</div>
+
+                                <a href="#" class="pull-right">
+                                    {{ str_plural('Reply', $thread->replies_count) }}
+                                    <span class="badge">{{ $thread->replies_count }}</span>
+                                </a>
+
                             </article>
 
                             <hr>

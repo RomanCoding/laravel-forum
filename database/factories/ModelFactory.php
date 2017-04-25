@@ -38,8 +38,12 @@ $factory->define(App\Thread::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Reply::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => factory('App\User')->create()->id,
-        'thread_id' => factory('App\Thread')->create()->id,
+        'user_id' => function() {
+            return factory('App\User')->create()->id;
+        },
+        'thread_id' => function() {
+            factory('App\Thread')->create()->id;
+        },
         'body' => $faker->paragraph,
     ];
 });
