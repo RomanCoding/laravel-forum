@@ -27,6 +27,15 @@
                         <div class="panel-body">
                             {{ $reply->body }}
                         </div>
+
+                        <form action="/likes/reply/{{$reply->id}}"   method="POST">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn-primary btn-xs btn-info">Like
+                                <span class="fa fa-heart"></span>
+                                {{ $reply->likes_count }}
+                            </button>
+                        </form>
+
                     </div>
                 @endforeach
 

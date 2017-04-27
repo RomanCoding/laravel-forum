@@ -42,7 +42,7 @@ $factory->define(App\Reply::class, function (Faker\Generator $faker) {
             return factory('App\User')->create()->id;
         },
         'thread_id' => function() {
-            factory('App\Thread')->create()->id;
+            return factory('App\Thread')->create()->id;
         },
         'body' => $faker->paragraph,
     ];

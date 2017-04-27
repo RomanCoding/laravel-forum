@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Channel;
 use Illuminate\Support\ServiceProvider;
 
 class ViewComposerProvider extends ServiceProvider
@@ -14,9 +15,12 @@ class ViewComposerProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function($view) {
+            $channels = \Cache::rememberForever('channels', function () {
+                return Channel::all();
+            });
             return $view->with([
                 'auth' => auth()->user(),
-                'channels' => \App\Channel::all()
+                'channels' => $channels
             ]);
         });
     }

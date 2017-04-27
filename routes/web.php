@@ -28,3 +28,5 @@ Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 Route::post('/threads/{channel}/{thread}', 'ReplyController@store');
 
 Route::get('/home', 'HomeController@index');
+
+Route::post('/likes/{model}/{id}', 'LikeController@store');
