@@ -30,3 +30,5 @@ Route::post('/threads/{channel}/{thread}', 'ReplyController@store');
 Route::get('/home', 'HomeController@index');
 
 Route::post('/likes/{model}/{id}', 'LikeController@store');
+
+Route::get('/profiles/{user}', 'ProfileController@show');

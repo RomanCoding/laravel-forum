@@ -46,4 +46,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reply::class);
     }
+
+    public function getRepliesCountAttribute()
+    {
+        return $this->replies()->count();
+    }
+
+    public function getThreadsCountAttribute()
+    {
+        return $this->threads()->count();
+    }
+
+    public function getLikesCountAttribute()
+    {
+        return $this->replies()->has('likes')->count();
+    }
 }
