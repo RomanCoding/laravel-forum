@@ -27,8 +27,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * A user can have threads created by him.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    /**
+     * A user can have replies written by him.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
     }
 }

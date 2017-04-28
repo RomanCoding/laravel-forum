@@ -28,9 +28,9 @@
                             {{ $reply->body }}
                         </div>
 
-                        <form action="/likes/reply/{{$reply->id}}"   method="POST">
+                        <form action="/likes/reply/{{$reply->id}}" method="POST">
                             {{ csrf_field() }}
-                            <button type="submit" class="btn-primary btn-xs btn-info">Like
+                            <button type="submit" class="btn-primary btn-xs btn-info" {{ $reply->isLiked() ? 'disabled' : '' }}>Like
                                 <span class="fa fa-heart"></span>
                                 {{ $reply->likes_count }}
                             </button>
