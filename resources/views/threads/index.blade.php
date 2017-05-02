@@ -4,9 +4,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                @foreach ($threads as $thread)
+                @forelse($threads as $thread)
                     @include('threads._panel')
-                @endforeach
+                @empty
+                    <p>This channel is currently empty, browse another channel :)</p>
+                @endforelse
                 {{ $threads->links() }}
             </div>
         </div>

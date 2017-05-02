@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -18,15 +19,17 @@ class DeletingTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_can_delete_thread()
+    public function a_user_can_delete_only_his_threads()
     {
         $this->signIn();
         $thread = create('App\Thread', [
             'user_id' => auth()->id()
         ]);
-        $reply = create('App\Reply', ['thread_id' => $thread->id]);
-        $this->json('DELETE', $thread->path());
-        $this->assertDatabaseMissing('threads', ['id' => 1]);
-        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $threadByAnotherUser = create('App\Thread');
+        $this->expectException(AuthorizationException::class);
+        $this->delete($threadByAnotherUser->path());
+
+        $this->delete($thread->path())
+            ->assertStatus(204);
     }
 }
