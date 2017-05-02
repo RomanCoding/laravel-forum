@@ -2,12 +2,24 @@
 
 @section('content')
     <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="/threads">Forum</a></li>
+            <li><a href="{{ $thread->channel->path() }}">{{ $thread->channel->name }}</a></li>
+            <li class="active"><a href="{{ $thread->path() }}">{{ $thread->title }}</a></li>
+        </ol>
         <div class="row">
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="#">{{ $thread->creator->name }}</a> posted:
+                        <a href="{{ $thread->creator->profile() }}">{{ $thread->creator->name }}</a> posted:
                         {{ $thread->title }}
+                        @if ($auth)
+                            <form action="{{ $thread->path() }}" class="pull-right" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button class="btn btn-link" type="submit">Delete thread</button>
+                            </form>
+                        @endif
                     </div>
 
                     <div class="panel-body">
@@ -15,33 +27,13 @@
                     </div>
                 </div>
 
-
                 @foreach ($replies as $reply)
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a href="#">
-                                {{ $reply->owner->name }}
-                            </a> said {{ $reply->created_at->diffForHumans() }}...
-                        </div>
-
-                        <div class="panel-body">
-                            {{ $reply->body }}
-                        </div>
-
-                        <form action="/likes/reply/{{$reply->id}}" method="POST">
-                            {{ csrf_field() }}
-                            <button type="submit" class="btn-primary btn-xs btn-info" {{ $reply->isLiked() ? 'disabled' : '' }}>Like
-                                <span class="fa fa-heart"></span>
-                                {{ $reply->likes_count }}
-                            </button>
-                        </form>
-
-                    </div>
+                    @include('replies._panel')
                 @endforeach
 
                 {{ $replies->links() }}
 
-                @if(auth()->check())
+                @if($auth)
                     <form action="{{ $thread->path() }}" method="POST">
                         {{ csrf_field() }}
                         <div class="form-group">
@@ -60,7 +52,8 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Posted by <a href="#">{{ $thread->creator->name }}</a> {{ $thread->created_at->diffForHumans() }}
+                        Posted by <a
+                                href="{{ $thread->creator->profile() }}">{{ $thread->creator->name }}</a> {{ $thread->created_at->diffForHumans() }}
                     </div>
 
                     <div class="panel-body">

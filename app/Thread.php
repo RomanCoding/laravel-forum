@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    protected $with = ['channel'];
+    protected $with = ['channel', 'creator'];
 
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
 
@@ -18,6 +18,10 @@ class Thread extends Model
         self::addGlobalScope('replyCount', function ($builder) {
             $builder->withCount('replies');
         });
+
+//        self::deleting(function($thread) {
+//            $thread->replies()->delete();
+//        });
     }
 
     /**

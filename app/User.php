@@ -38,6 +38,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Get given amount of latest user's threads.
+     *
+     * @param int $count
+     * @return mixed
+     */
+    public function latestThreads(int $count)
+    {
+        return $this->threads()->latest()->limit($count)->get();
+    }
+
+    /**
      * A user can have replies written by him.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -47,18 +58,18 @@ class User extends Authenticatable
         return $this->hasMany(Reply::class);
     }
 
-    public function getRepliesCountAttribute()
-    {
-        return $this->replies()->count();
-    }
-
-    public function getThreadsCountAttribute()
-    {
-        return $this->threads()->count();
-    }
-
     public function getLikesCountAttribute()
     {
         return $this->replies()->has('likes')->count();
+    }
+
+    /**
+     * Fetch link to user's profile.
+     *
+     * @return string
+     */
+    public function profile()
+    {
+        return "/profiles/{$this->id}";
     }
 }
