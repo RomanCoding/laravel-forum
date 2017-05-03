@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Traits\Likeable;
 
 class Reply extends Model
 {
-    use Likeable;
+    use Likeable, RecordsActivity;
 
     protected $with = ['owner', 'likes'];
 
