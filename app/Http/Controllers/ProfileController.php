@@ -54,7 +54,7 @@ class ProfileController extends Controller
         ])->findOrFail($user);
         return view('profiles.show')->with([
             'user' => $user,
-            'threads' => $user->latestThreads(5)
+            'activities' => $user->getLastActivity(20)
         ]);
     }
 

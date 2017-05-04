@@ -72,4 +72,22 @@ class User extends Authenticatable
     {
         return "/profiles/{$this->id}";
     }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    /**
+     * Get last activity of the user.
+     *
+     * @param $entries
+     * @return mixed
+     */
+    public function getLastActivity($entries)
+    {
+        return $this->activity()->latest()->with('subject')->take($entries)->get()->groupBy(function ($activity) {
+            return $activity->created_at->format('Y-m-d');
+        });
+    }
 }

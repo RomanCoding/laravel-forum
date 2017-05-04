@@ -11,10 +11,15 @@
                 <li class="list-group-item"><b>Replies:</b> {{ $user->replies_count }}</li>
                 <li class="list-group-item"><b>Likes earned:</b> {{ $user->likes_count }}</li>
             </ul>
-            @if (count($threads))
-                <h2>Last threads by {{ $user->name }}</h2>
-                @foreach ($threads as $thread)
-                    @include('threads._panel')
+            @if (count($activities))
+                <h2>Last activity</h2>
+                @foreach ($activities as $date => $entries)
+                    <div class="page-header">
+                        {{ $date }}
+                    </div>
+                    @foreach($entries as $activity)
+                        @include("profiles.activities.{$activity->activity}")
+                    @endforeach
                 @endforeach
             @endif
         </div>
