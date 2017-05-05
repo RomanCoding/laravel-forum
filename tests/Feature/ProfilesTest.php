@@ -16,4 +16,15 @@ class ProfilesTest extends TestCase
         $this->get("profiles/{$user->id}")
             ->assertSee($user->name);
     }
+
+    /** @test */
+    public function a_profile_shows_user_activity()
+    {
+        $this->signIn();
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
+
+        $this->get(auth()->user()->profile())
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Activity;
 use App\Http\Filters\ThreadsFilter;
 use App\User;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
@@ -54,7 +55,7 @@ class ProfileController extends Controller
         ])->findOrFail($user);
         return view('profiles.show')->with([
             'user' => $user,
-            'activities' => $user->getLastActivity(20)
+            'activities' => Activity::feed($user)
         ]);
     }
 

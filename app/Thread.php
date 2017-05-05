@@ -24,6 +24,7 @@ class Thread extends Model
 
         self::deleting(function($thread) {
             $thread->replies()->delete();
+            $thread->activity()->delete();
         });
     }
 

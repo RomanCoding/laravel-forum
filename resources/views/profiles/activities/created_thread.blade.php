@@ -1,5 +1,5 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
+@component('profiles.activities.activity')
+    @slot('heading')
         Created thread
         <a href="{{ $activity->subject->path() }}">
             {{ $activity->subject->title }}
@@ -7,11 +7,9 @@
         <div class="pull-right">
             {{ $activity->subject->created_at->diffForHumans() }}
         </div>
-    </div>
+    @endslot
 
-    <div class="panel-body">
-        <article>
-            <div class="body">{{ $activity->subject->body }}</div>
-        </article>
-    </div>
-</div>
+    @slot('body')
+        <div class="body">{{ $activity->subject->body }}</div>
+    @endslot
+@endcomponent

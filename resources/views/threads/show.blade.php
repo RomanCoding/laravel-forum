@@ -13,13 +13,13 @@
                     <div class="panel-heading">
                         <a href="{{ $thread->creator->profile() }}">{{ $thread->creator->name }}</a> posted:
                         {{ $thread->title }}
-                        @if ($auth)
+                        @can('delete', $thread)
                             <form action="{{ $thread->path() }}" class="pull-right" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <button class="btn btn-link" type="submit">Delete thread</button>
                             </form>
-                        @endif
+                        @endcan
                     </div>
 
                     <div class="panel-body">

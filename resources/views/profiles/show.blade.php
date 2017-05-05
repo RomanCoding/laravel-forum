@@ -17,8 +17,8 @@
                     <div class="page-header">
                         {{ $date }}
                     </div>
-                    @foreach($entries as $activity)
-                        @include("profiles.activities.{$activity->activity}")
+                    @foreach ($entries as $activity)
+                        @include ("profiles.activities.{$activity->activity}")
                     @endforeach
                 @endforeach
             @endif

@@ -47,6 +47,7 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
@@ -108,7 +109,7 @@ class ThreadController extends Controller
      */
     public function destroy($channel, Thread $thread)
     {
-        $this->authorize('delete');
+        $this->authorize('delete', $thread);
         $thread->delete();
         if (request()->wantsJson()) {
             return response([], 204);
