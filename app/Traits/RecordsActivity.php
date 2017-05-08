@@ -13,6 +13,10 @@ trait RecordsActivity
         self::created(function($subject) {
             $subject->recordActivity('created');
         });
+
+        self::deleting(function($subject) {
+            $subject->activity()->delete();
+        });
     }
 
     private function recordActivity($event)

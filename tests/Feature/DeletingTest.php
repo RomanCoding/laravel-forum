@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use Illuminate\Auth\Access\AuthorizationException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -31,5 +32,23 @@ class DeletingTest extends TestCase
 
         $this->delete($thread->path())
             ->assertStatus(204);
+    }
+
+    /** @test */
+    public function it_delete_replies_and_activity_with_thread_deleting()
+    {
+        $this->signIn();
+        $thread = create('App\Thread', [
+            'user_id' => auth()->id()
+        ]);
+        $reply = create('App\Reply', [
+            'thread_id' => $thread->id,
+            'user_id' => auth()->id()
+        ]);
+        $this->delete($thread->path());
+        $this->assertDatabaseMissing('replies', [
+            'thread_id' => $thread->id,
+        ]);
+        $this->assertCount(0, Activity::all());
     }
 }

@@ -29,6 +29,7 @@ class ReplyController extends Controller
             'user_id' => $request->user()->id,
             'body' => $request->body,
         ]);
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', 'Successfully replied!');
     }
 }
