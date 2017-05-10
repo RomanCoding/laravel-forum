@@ -44,4 +44,26 @@ class ParticipateInThreadTest extends TestCase
         $response = $this->post($this->thread->path(), make('App\Reply', ['body' => null])->toArray());
         $response->assertSessionHasErrors('body');
     }
+
+    /** @test */
+    public function guest_can_not_edit_any_reply()
+    {
+        $reply = create('App\Reply');
+        $this->withExceptionHandling()
+            ->patch("/replies/{$reply->id}", ['body' => 'new body'])
+            ->assertRedirect('login');
+    }
+
+    /** @test */
+    public function a_user_can_edit_only_his_replies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply');
+        $this->withExceptionHandling()
+            ->patch("/replies/{$reply->id}", ['body' => 'New body'])
+            ->assertStatus(403);
+        $replyByUser = create('App\Reply', ['user_id' => auth()->id()]);
+        $this->patch("/replies/{$replyByUser->id}", ['body' => 'New body']);
+        $this->assertDatabaseHas('replies', ['id' => $replyByUser->id, 'body' => 'New body']);
+    }
 }

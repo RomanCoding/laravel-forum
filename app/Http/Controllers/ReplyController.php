@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -31,5 +32,18 @@ class ReplyController extends Controller
         ]);
         return redirect($thread->path())
             ->with('flash', 'Successfully replied!');
+    }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('edit', $reply);
+        $reply->delete();
+        return back();
+    }
+
+    public function update(Reply $reply, Request $request)
+    {
+        $this->authorize('edit', $reply);
+        $reply->update(['body' => $request->body]);
     }
 }

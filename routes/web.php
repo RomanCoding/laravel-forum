@@ -28,6 +28,9 @@ Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 Route::post('/threads/{channel}/{thread}', 'ReplyController@store');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy');
 
+Route::delete('/replies/{reply}', 'ReplyController@destroy');
+Route::patch('/replies/{reply}', 'ReplyController@update');
+
 Route::get('/home', 'HomeController@index');
 
 Route::post('/likes/{model}/{id}', 'LikeController@store');

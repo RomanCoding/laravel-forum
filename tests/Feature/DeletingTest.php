@@ -51,4 +51,26 @@ class DeletingTest extends TestCase
         ]);
         $this->assertCount(0, Activity::all());
     }
+
+    /** @test */
+    public function guest_can_not_delete_any_reply()
+    {
+        $reply = create('App\Reply');
+        $this->withExceptionHandling()
+            ->delete("/replies/{$reply->id}")
+            ->assertRedirect('login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_only_his_replies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply');
+        $this->withExceptionHandling()
+            ->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+        $replyByUser = create('App\Reply', ['user_id' => auth()->id()]);
+        $this->delete("/replies/{$replyByUser->id}");
+        $this->assertDatabaseMissing('replies', ['id' => $replyByUser->id]);
+    }
 }

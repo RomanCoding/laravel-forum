@@ -784,6 +784,7 @@ __webpack_require__(29);
  */
 
 Vue.component('flash', __webpack_require__(34));
+Vue.component('reply', __webpack_require__(53));
 
 var app = new Vue({
   el: '#app'
@@ -41808,6 +41809,74 @@ module.exports = function listToStyles (parentId, list) {
   }
   return styles
 }
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['reply'],
+    data: function data() {
+        return {
+            editing: false,
+            body: this.reply.body,
+            initialBody: this.reply.body
+        };
+    },
+
+    methods: {
+        update: function update() {
+            var _this = this;
+
+            axios.patch('/replies/' + this.reply.id, {
+                body: this.body
+            }).then(function () {
+                _this.editing = false;
+                flash('Updated a reply!');
+            });
+        },
+        cancel: function cancel() {
+            this.body = this.initialBody;
+            this.editing = false;
+        }
+    }
+});
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(35)(
+  /* script */
+  __webpack_require__(52),
+  /* template */
+  null,
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "D:\\Projects\\forum\\resources\\assets\\js\\components\\Reply.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-72f316f1", Component.options)
+  } else {
+    hotAPI.reload("data-v-72f316f1", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
 
 
 /***/ })
