@@ -22,6 +22,21 @@ class LikeController extends Controller
         if ($this->isLikeable($model) && ! ($content = $model::findOrFail($id))->isLiked()) {
             $content->like(auth()->id());
         }
+        if (request()->wantsJson()) {
+            return response(['status' => 'liked']);
+        }
+        return back();
+    }
+
+    public function destroy($model, $id)
+    {
+        $model = "\\App\\{$model}";
+        if ($this->isLikeable($model) && ($content = $model::findOrFail($id))->isLiked()) {
+            $content->unlike(auth()->id());
+        }
+        if (request()->wantsJson()) {
+            return response(['status' => 'disliked']);
+        }
         return back();
     }
 

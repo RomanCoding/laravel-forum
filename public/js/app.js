@@ -785,6 +785,7 @@ __webpack_require__(29);
 
 Vue.component('flash', __webpack_require__(34));
 Vue.component('reply', __webpack_require__(53));
+Vue.component('like', __webpack_require__(55));
 
 var app = new Vue({
   el: '#app'
@@ -41836,12 +41837,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 body: this.body
             }).then(function () {
                 _this.editing = false;
-                flash('Updated a reply!');
+                flash('Reply has been updated!');
             });
         },
         cancel: function cancel() {
             this.body = this.initialBody;
             this.editing = false;
+        },
+        destroy: function destroy() {
+            var _this2 = this;
+
+            axios.delete('/replies/' + this.reply.id).then(function () {
+                $(_this2.$el).fadeOut(300, function () {
+                    flash('Reply has been deleted!');
+                });
+            });
         }
     }
 });
@@ -41878,6 +41888,115 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['subject'],
+    data: function data() {
+        return {
+            count: this.subject.likesCount,
+            isLiked: this.subject.isLiked
+        };
+    },
+
+    computed: {
+        classes: function classes() {
+            return 'btn btn-xs' + (this.isLiked ? ' btn-primary' : '');
+        },
+        path: function path() {
+            return '/likes/' + this.subject.model + '/' + this.subject.id;
+        }
+    },
+    methods: {
+        toggle: function toggle() {
+            this.isLiked ? this.unlike() : this.like();
+        },
+        unlike: function unlike() {
+            var _this = this;
+
+            axios.delete(this.path).then(function () {
+                _this.count--;
+                _this.isLiked = false;
+            });
+        },
+        like: function like() {
+            var _this2 = this;
+
+            axios.post(this.path).then(function () {
+                _this2.count++;
+                _this2.isLiked = true;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(35)(
+  /* script */
+  __webpack_require__(54),
+  /* template */
+  __webpack_require__(56),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "D:\\Projects\\forum\\resources\\assets\\js\\components\\Like.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Like.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9ce04340", Component.options)
+  } else {
+    hotAPI.reload("data-v-9ce04340", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    class: _vm.classes,
+    on: {
+      "click": _vm.toggle
+    }
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-heart"
+  }, [_vm._v(_vm._s(this.count))])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-9ce04340", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -30,6 +30,19 @@ trait Likeable
     }
 
     /**
+     * Remove like from an object by given user.
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function unlike($userId)
+    {
+        return $this->likes()->where([
+            'user_id' => $userId,
+        ])->delete();
+    }
+
+    /**
      * Check if an object was already liked by current user.
      *
      * @return bool
@@ -37,6 +50,11 @@ trait Likeable
     public function isLiked()
     {
         return !! $this->likes->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsLikedAttribute()
+    {
+        return $this->isLiked();
     }
 
     public function getLikesCountAttribute()

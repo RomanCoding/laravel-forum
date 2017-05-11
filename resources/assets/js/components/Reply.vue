@@ -14,12 +14,19 @@
                     body: this.body
                 }).then(() => {
                     this.editing = false;
-                    flash('Updated a reply!');
+                    flash('Reply has been updated!');
                 });
             },
             cancel() {
                 this.body = this.initialBody;
                 this.editing = false;
+            },
+            destroy() {
+                axios.delete('/replies/' + this.reply.id).then(() => {
+                    $(this.$el).fadeOut(300, () => {
+                        flash('Reply has been deleted!');
+                    });
+                });
             }
         }
     }

@@ -1,4 +1,5 @@
-<reply :reply="{{ json_encode(['id' => $reply->id, 'body' => $reply->body]) }}"inline-template>
+<reply :reply="{{ json_encode(['id' => $reply->id, 'body' => $reply->body]) }}" inline-template v-cloak>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <a href="{{ $reply->owner->profile() }}">
@@ -17,21 +18,10 @@
             <div v-else v-text="body"></div>
         </div>
 
-        <form action="/likes/reply/{{$reply->id}}" method="POST">
-            {{ csrf_field() }}
-            <button type="submit"
-                    class="btn-primary btn-xs btn-info" {{ (!$auth || $reply->isLiked()) ? 'disabled' : '' }}>Like
-                <span class="fa fa-heart"></span>
-                {{ $reply->likes_count }}
-            </button>
-        </form>
+        <like :subject="{{ json_encode(['model' => 'reply', 'id' => $reply->id, 'body' => $reply->body, 'likesCount' => $reply->likesCount, 'isLiked' => $reply->isLiked]) }}"></like>
         @can('edit', $reply)
             <button class="btn btn-primary btn-xs" @click="editing=true">Edit</button>
-            <form action="/replies/{{ $reply->id }}" method="POST">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-                <button class="btn btn-danger btn-xs">Delete</button>
-            </form>
+            <button class="btn btn-danger btn-xs" @click="destroy">Delete</button>
         @endcan
     </div>
 </reply>

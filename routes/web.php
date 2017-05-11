@@ -34,5 +34,6 @@ Route::patch('/replies/{reply}', 'ReplyController@update');
 Route::get('/home', 'HomeController@index');
 
 Route::post('/likes/{model}/{id}', 'LikeController@store');
+Route::delete('/likes/{model}/{id}', 'LikeController@destroy');;
 
 Route::get('/profiles/{user}', 'ProfileController@show');

@@ -21,6 +21,12 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
