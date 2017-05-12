@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Like;
 use Illuminate\Auth\Access\AuthorizationException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -49,7 +50,30 @@ class DeletingTest extends TestCase
         $this->assertDatabaseMissing('replies', [
             'thread_id' => $thread->id,
         ]);
-        $this->assertCount(0, Activity::all());
+        $this->assertEquals(0, Activity::count());
+    }
+
+    /** @test */
+    public function it_delete_likes_and_activity_with_reply_deleting()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $reply->like(auth()->id());
+
+        $this->delete("/replies/{$reply->id}");
+        $this->assertEquals(0, Like::count());
+        $this->assertEquals(1, Activity::count());
+    }
+
+    /** @test */
+    public function it_delete_activity_when_unlike_a_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $reply->like(auth()->id());
+        $reply->unlike(auth()->id());
+        $this->assertEquals(0, Like::count());
+        $this->assertEquals(2, Activity::count());
     }
 
     /** @test */

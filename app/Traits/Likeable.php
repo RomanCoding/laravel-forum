@@ -2,10 +2,18 @@
 
 namespace App\Traits;
 
+use App\Activity;
 use App\Like;
 
 trait Likeable
 {
+    protected static function bootLikeable()
+    {
+        self::deleting(function ($subject) {
+            $subject->likes->each->delete();
+        });
+    }
+
     /**
      * Object can have many likes.
      *
@@ -37,9 +45,14 @@ trait Likeable
      */
     public function unlike($userId)
     {
-        return $this->likes()->where([
-            'user_id' => $userId,
-        ])->delete();
+        $this->likes()
+            ->whereUserId($userId)
+            ->firstOrFail()
+            ->activity()
+            ->delete();
+        return $this->likes()
+            ->whereUserId($userId)
+            ->delete();
     }
 
     /**
@@ -49,7 +62,7 @@ trait Likeable
      */
     public function isLiked()
     {
-        return !! $this->likes->where('user_id', auth()->id())->count();
+        return !!$this->likes->where('user_id', auth()->id())->count();
     }
 
     public function getIsLikedAttribute()
