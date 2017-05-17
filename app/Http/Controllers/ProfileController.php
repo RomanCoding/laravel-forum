@@ -48,11 +48,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $user = User::withCount([
-            'replies', 'threads' => function ($query) {
-                $query->withoutGlobalScope('replyCount');
-            }
-        ])->findOrFail($user);
+        $user->withCount(['replies', 'threads']);
         return view('profiles.show')->with([
             'user' => $user,
             'activities' => Activity::feed($user)

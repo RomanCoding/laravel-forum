@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        props: ['subject'],
+        props: ['subject', 'subjectType'],
         data() {
             return {
                 count: this.subject.likesCount,
@@ -18,7 +18,7 @@
                 return 'btn btn-xs' + (this.isLiked ? ' btn-primary' : '');
             },
             path: function() {
-                return '/likes/' + this.subject.model + '/' + this.subject.id;
+                return '/likes/' + this.subjectType + '/' + this.subject.id;
             }
         },
         methods: {
