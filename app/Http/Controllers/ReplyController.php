@@ -21,17 +21,20 @@ class ReplyController extends Controller
      * @param Thread $thread
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request, $channel, Thread $thread)
+    public function store($channel, Thread $thread)
     {
-        $this->validate($request, [
+        $this->validate(request(), [
             'body' => 'required',
         ]);
-        $thread->addReply([
-            'user_id' => $request->user()->id,
-            'body' => $request->body,
+        $reply = $thread->addReply([
+            'user_id' => request()->user()->id,
+            'body' => request()->body,
         ]);
+        if (request()->expectsJson()) {
+            return $reply->load('owner');
+        }
         return redirect($thread->path())
-            ->with('flash', 'Successfully replied!');
+            ->with('flash', 'Replied!');
     }
 
     public function destroy(Reply $reply)

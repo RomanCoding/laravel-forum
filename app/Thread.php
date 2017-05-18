@@ -71,10 +71,11 @@ class Thread extends Model
      * Add a reply for current thread.
      *
      * @param $reply
+     * @return Model
      */
     public function addReply($reply)
     {
-        $this->replies()->create($reply);
+        return $this->replies()->create($reply);
     }
 
     /**
