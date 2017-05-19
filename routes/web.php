@@ -25,6 +25,7 @@ Route::resource('threads', 'ThreadController', [
 ]);
 Route::get('/threads/{channel}', 'ChannelController@show');
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
+Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
 Route::post('/threads/{channel}/{thread}', 'ReplyController@store');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy');
 

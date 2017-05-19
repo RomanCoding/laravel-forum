@@ -98,4 +98,14 @@ class BrowseThreadsTest extends TestCase
         $response = $this->getJson("/threads?by=NameForTest&sort=popular")->json();
         $this->assertEquals([3, 1], array_column($response, 'replies_count'));
     }
+
+    /** @test */
+    public function a_user_can_fetch_replies_for_any_thread()
+    {
+        $thread = create('App\Thread');
+        create('App\Reply', ['thread_id' => $thread->id], 5);
+        $response = $this->getJson($thread->path() . '/replies')->json();
+        $this->assertEquals(5, $response['total']);
+        $this->assertCount(1, $response['data']);
+    }
 }

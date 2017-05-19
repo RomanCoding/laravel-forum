@@ -47,7 +47,6 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
@@ -74,7 +73,6 @@ class ThreadController extends Controller
     {
         return view('threads.show')->with([
             'thread' => $thread,
-            'replies' => $thread->replies()->paginate(10)
         ]);
     }
 

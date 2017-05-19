@@ -4,7 +4,7 @@
             <a href="'/profiles/' + data.owner.id"
                v-text="data.owner.name">
 
-            </a> said {{ data.created_at }}...
+            </a> said <span v-text="ago"></span>...
         </div>
 
         <div class="panel-body">
@@ -31,6 +31,7 @@
 
 <script>
     import Like from './Like.vue';
+    import moment from 'moment';
     export default {
         props: ['data'],
         components: {Like},
@@ -43,6 +44,9 @@
             }
         },
         computed: {
+            ago() {
+                return moment(this.data.created_at).fromNow();
+            },
             authenticated() {
                 return !!(window.App.auth);
             },
