@@ -43,12 +43,12 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
+     * @param $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($user)
     {
-        $user->withCount(['replies', 'threads']);
+        $user = User::withCount(['replies', 'threads'])->findOrFail($user);
         return view('profiles.show')->with([
             'user' => $user,
             'activities' => Activity::feed($user)

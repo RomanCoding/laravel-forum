@@ -10,7 +10,6 @@ class BrowseThreadsTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected $threads;
     protected $thread;
 
     public function setUp()
@@ -82,6 +81,30 @@ class BrowseThreadsTest extends TestCase
 
         $response = $this->getJson('/threads?sort=new')->json();
         $this->assertEquals([1, 2], array_column($response, 'id'));
+    }
+
+    /** @test */
+    public function a_user_can_browse_unanswered_threads()
+    {
+        create('App\Reply', ['thread_id' => $this->thread->id]);
+        $threadWithoutReplies = create('App\Thread');
+
+        $this->get('/threads?sort=unanswered')
+            ->assertSee($threadWithoutReplies->body)
+            ->assertDontSee($this->thread->body);
+    }
+
+    /** @test */
+    public function a_user_can_browse_unanswered_threads_for_time_period()
+    {
+        create('App\Reply', ['thread_id' => $this->thread->id]);
+        $threadWithoutReplies = create('App\Thread');
+        $oldThreadWithoutReplies = create('App\Thread', ['created_at' => Carbon::now()->subDay()]);
+
+        $this->get('/threads?sort=unanswered&t=hour')
+            ->assertSee($threadWithoutReplies->body)
+            ->assertDontSee($oldThreadWithoutReplies->body)
+            ->assertDontSee($this->thread->body);
     }
 
     /** @test */

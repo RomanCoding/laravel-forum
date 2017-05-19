@@ -45,10 +45,15 @@ class ThreadsFilter extends Filter
      */
     protected function sort($by)
     {
-        if ($by == 'popular') {
-            $this->query->getQuery()->orders = [];
-            return $this->query->orderBy('replies_count', 'desc');
+        switch ($by) {
+            case 'popular':
+                $this->query->getQuery()->orders = [];
+                return $this->query->orderBy('replies_count', 'desc');
+            case 'unanswered':
+                $this->query->getQuery()->orders = [];
+                return $this->query->whereDoesntHave('replies');
+            default:
+                return $this->query->latest();
         }
-        return $this->query->latest();
     }
 }

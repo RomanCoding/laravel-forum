@@ -21,6 +21,8 @@
                        aria-expanded="false">Browse <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/threads">All threads</a></li>
+                        <li><a href="/threads?sort=popular">Popular threads</a></li>
+                        <li><a href="/threads?sort=unanswered">Unanswered threads</a></li>
                         @if ($auth)
                             <li><a href="/threads?by={{ $auth->name }}">Your threads</a></li>
                         @endif
