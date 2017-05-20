@@ -21,12 +21,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('threads', 'ThreadController', [
-    'except' => ['show']
+    'except' => ['show', 'destroy']
 ]);
 Route::get('/threads/{channel}', 'ChannelController@show');
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
 Route::post('/threads/{channel}/{thread}', 'ReplyController@store');
+Route::post('/threads/{channel}/{thread}/subscribe', 'ThreadSubscriptionController@store');
+Route::post('/threads/{channel}/{thread}/unsubscribe', 'ThreadSubscriptionController@destroy');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy');
 
 Route::delete('/replies/{reply}', 'ReplyController@destroy');

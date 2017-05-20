@@ -101,4 +101,14 @@ class Thread extends Model
     {
         return $filter->apply($query)->paginate($perPage)->appends($filter->getFilters());
     }
+
+    /**
+     * Thread has people subscribed to it.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions');
+    }
 }

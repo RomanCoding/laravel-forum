@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'email'
     ];
 
     /**
@@ -76,5 +76,36 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    /**
+     * A user can have threads subscribed to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Thread::class, 'subscriptions');
+    }
+
+    /**
+     * Subscribe to a given thread.
+     *
+     * @param Thread $thread
+     */
+    public function subscribeToThread(Thread $thread)
+    {
+        $this->subscriptions()->save($thread);
+    }
+
+    /**
+     * Unsubscribe from a given thread.
+     *
+     * @param Thread $thread
+     */
+    public function unsubscribeFromThread(Thread $thread)
+    {
+        $this->subscriptions()
+            ->detach($thread);
     }
 }
