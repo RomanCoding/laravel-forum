@@ -43,6 +43,7 @@
                             This thread
                             has <span v-text="repliesCount"></span> {{ str_plural('reply', $thread->replies_count) }}.
                         </div>
+                        <subscription-button :subscribed="{{ json_encode($thread->isSubscribedTo()) }}"></subscription-button>
                     </div>
                 </div>
             </div>

@@ -109,6 +109,19 @@ class Thread extends Model
      */
     public function subscribers()
     {
-        return $this->belongsToMany(User::class, 'subscriptions');
+        return $this->belongsToMany(User::class, 'subscriptions')
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if current user is subscribed to a thread.
+     *
+     * @return mixed
+     */
+    public function isSubscribedTo()
+    {
+        return $this->subscribers()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 }
