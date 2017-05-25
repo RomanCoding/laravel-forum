@@ -25,6 +25,7 @@ class ThreadSubscribingTest extends TestCase
         $this->signIn();
         $this->post($this->thread->path() . '/subscribe');
         $this->assertCount(1, $this->thread->subscribers);
+        $this->assertCount(1, auth()->user()->subscriptions);
     }
 
     /** @test */
@@ -38,11 +39,10 @@ class ThreadSubscribingTest extends TestCase
     public function user_can_unsubscribe_from_a_thread()
     {
         $this->signIn($user = create('App\User'));
-        $this->post($this->thread->path() . '/unsubscribe');
-        $this->assertCount(0, $this->thread->subscribers);
-        $this->assertCount(0, $user->subscriptions);
         $this->post($this->thread->path() . '/subscribe');
-        $this->post($this->thread->path() . '/unsubscribe');
+        $this->assertCount(1, $this->thread->subscribers);
+        $this->assertCount(1, $user->subscriptions);
+        $this->delete($this->thread->path() . '/subscribe');
         $this->assertCount(0, $this->thread->fresh()->subscribers);
         $this->assertCount(0, $user->fresh()->subscriptions);
     }

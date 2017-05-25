@@ -40,3 +40,5 @@ Route::post('/likes/{model}/{id}', 'LikeController@store');
 Route::delete('/likes/{model}/{id}', 'LikeController@destroy');;
 
 Route::get('/profiles/{user}', 'ProfileController@show');
+Route::get('/profiles/{user}/notifications', 'NotificationController@index');
+Route::delete('/profiles/{user}/notifications/{notification}', 'NotificationController@destroy');

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Http\Filters\ThreadsFilter;
+use App\Notifications\ThreadWasReplied;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,7 +76,12 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+        $this->subscribers
+            ->where('id', '!=', $reply->user_id)
+            ->each
+            ->notify(new ThreadWasReplied($this, $reply));
+        return $reply;
     }
 
     /**
